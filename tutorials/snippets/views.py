@@ -9,8 +9,17 @@ from rest_framework import generics
 from django.contrib.auth.models import User
 from rest_framework import permissions
 from snippets.permissions import IsOwnerOrReadOnly
+from rest_framework import renderers, reverse
+from rest_framework.decorators import api_view
 
 # Create your views here.
+
+@api_view(['GET'])
+def api_root(request, format=None):
+    return Response({
+        'users' : reverse('user-list', request=request, format=format),
+        'snippets' : reverse('snippet-list', request=request, format=format)
+    })
     
 class SnippetView(generics.ListCreateAPIView):
     serializer_class = SnippetSerializer
@@ -30,7 +39,7 @@ class SnippetDetailView(APIView):
         
     def get(self, request, pk, format=None):
         snippet = self.get_object(pk)
-        serializer = SnippetSerializer(snippet)
+        serializer = SnippetSerializer(snippet, context={'request' : request})
         return Response(serializer.data)
     
     def put(self, request, pk, format=None):
@@ -54,3 +63,10 @@ class UserDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+class SnippetHighlight(generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    renderer_classes = [renderers.StaticHTMLRenderer]
+
+    def get(self, request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(snippet.highlighted)
