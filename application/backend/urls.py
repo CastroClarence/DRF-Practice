@@ -4,6 +4,8 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'services', views.ServiceView, basename='service')
+router.register(r'projects', views.ProjectView, basename='project')
+router.register(r'images', views.ContentImageView, basename='image')
 
 urlpatterns = [
     path('user/', views.UserView.as_view()),

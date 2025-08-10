@@ -29,7 +29,26 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ['url', 'id', 'username']
 
+class ProjectSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = models.Project
+        fields = ['url', 'id', 'name', 'description', 'service']
+
 class ServiceSerializer(serializers.HyperlinkedModelSerializer):
+    projects = ProjectSerializer(many=True, read_only=True)
+    url = serializers.HyperlinkedIdentityField(
+        view_name='service-detail'
+    )
     class Meta:
         model = models.Service
-        fields = ['url', 'id', 'name', 'description']
+        fields = ['url', 'id', 'name', 'description', 'projects']
+
+class ContentImageSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='image-detail'
+    )
+    project = ProjectSerializer(many=True, read_only=True)
+    service = ServiceSerializer(many=True, read_only=True)
+    class Meta:
+        model = models.ContentImage
+        fields = ['url', 'id', 'project', 'service']
