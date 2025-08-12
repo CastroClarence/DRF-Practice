@@ -69,3 +69,10 @@ class SocialSerializer(serializers.HyperlinkedModelSerializer):
         model = models.Social
         fields = ['url', 'id', 'platform', 'link']
 
+class FeedbackSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name = 'feedback-detail'
+    )
+    class Meta:
+        model = models.Feedback
+        fields = ['url','id', 'user', 'title', 'description', 'status', 'image']

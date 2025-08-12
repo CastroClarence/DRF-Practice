@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from backend import serializers
 from backend.permissions import IsOwnerOrReadOnly
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
-from backend.models import Service, Project, ServiceImage, ProjectImage, Social
+from backend.models import Service, Project, ServiceImage, ProjectImage, Social, Feedback
 from rest_framework.parsers import MultiPartParser, FormParser
 # Create your views here.
 
@@ -79,3 +79,8 @@ class SocialView(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user = self.request.user)
+
+class FeedbackView(viewsets.ModelViewSet):
+    queryset = Feedback.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.FeedbackSerializer
