@@ -17,7 +17,7 @@ class Project(models.Model):
     description = models.TextField()
 
     def __str__(self):
-        return f'{self.name}'
+        return f'{self.id} - {self.name}'
     
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -30,7 +30,23 @@ class Project(models.Model):
         super().__init__(*args, **kwargs)
         self.user = self.service.user
 
-class ContentImage(models.Model):
+class ServiceImage(models.Model):
     service = models.ForeignKey(Service, related_name='images', on_delete=models.CASCADE, blank=True)
+    image = models.ImageField(upload_to='service_images/')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = self.service.user
+
+class ProjectImage(models.Model):
     project = models.ForeignKey(Project, related_name='images', on_delete=models.CASCADE, blank=True)
-    image = models.ImageField(upload_to='content_images/')
+    image = models.ImageField(upload_to='project_images/')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.user = self.project.user
+
+class Social(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='socials')
+    link = models.URLField()
+    platform = models.CharField(max_length=100)

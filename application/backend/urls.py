@@ -5,7 +5,9 @@ from rest_framework.routers import DefaultRouter
 router = DefaultRouter()
 router.register(r'services', views.ServiceView, basename='service')
 router.register(r'projects', views.ProjectView, basename='project')
-router.register(r'images', views.ContentImageView, basename='image')
+router.register(r'service-images', views.ServiceImageView, basename='service-image')
+router.register(r'project-images', views.ProjectImageView, basename='project-image')
+router.register(r'socials', views.SocialView, basename='social')
 
 urlpatterns = [
     path('user/', views.UserView.as_view()),

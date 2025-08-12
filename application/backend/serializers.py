@@ -29,6 +29,23 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ['url', 'id', 'username']
 
+class ServiceImageSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='service-image-detail'
+    )
+    class Meta:
+        model = models.ServiceImage
+        fields = ['url', 'id', 'service', 'image']
+
+class ProjectImageSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedIdentityField(
+        view_name='project-image-detail'
+    )
+
+    class Meta:
+        model = models.ProjectImage
+        fields = ['url', 'id', 'project', 'image']
+
 class ProjectSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = models.Project
@@ -36,19 +53,19 @@ class ProjectSerializer(serializers.HyperlinkedModelSerializer):
 
 class ServiceSerializer(serializers.HyperlinkedModelSerializer):
     projects = ProjectSerializer(many=True, read_only=True)
+    images = ServiceImageSerializer(many=True, read_only=True)
     url = serializers.HyperlinkedIdentityField(
         view_name='service-detail'
     )
     class Meta:
         model = models.Service
-        fields = ['url', 'id', 'name', 'description', 'projects']
+        fields = ['url', 'id', 'name', 'description', 'projects', 'images']
 
-class ContentImageSerializer(serializers.HyperlinkedModelSerializer):
+class SocialSerializer(serializers.HyperlinkedModelSerializer):
     url = serializers.HyperlinkedIdentityField(
-        view_name='image-detail'
+        view_name = 'social-detail'
     )
-    project = ProjectSerializer(many=True, read_only=True)
-    service = ServiceSerializer(many=True, read_only=True)
     class Meta:
-        model = models.ContentImage
-        fields = ['url', 'id', 'project', 'service']
+        model = models.Social
+        fields = ['url', 'id', 'platform', 'link']
+
