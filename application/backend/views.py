@@ -3,6 +3,7 @@ from rest_framework import views, generics, permissions, viewsets
 from django.contrib.auth.models import User
 from backend import serializers
 from backend.permissions import IsOwnerOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from backend.models import Service, Project, ServiceImage, ProjectImage, Social
 from rest_framework.parsers import MultiPartParser, FormParser
 # Create your views here.
@@ -25,7 +26,7 @@ class UserDetailView(generics.RetrieveAPIView):
     """
     A view that enables Retrieve function for User
     """
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 
@@ -33,7 +34,7 @@ class ServiceView(viewsets.ModelViewSet):
     """
     A view that enables CRUD function for Services
     """
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly]
     queryset = Service.objects.all()
     serializer_class = serializers.ServiceSerializer
 
@@ -46,7 +47,7 @@ class ProjectView(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     serializer_class = serializers.ProjectSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly]
 
 class ServiceImageView(viewsets.ModelViewSet):
     """
@@ -54,7 +55,7 @@ class ServiceImageView(viewsets.ModelViewSet):
     """
     queryset = ServiceImage.objects.all()
     serializer_class = serializers.ServiceImageSerializer
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly]
     parser_classes = (MultiPartParser, FormParser)
 
     # def perform_create(self, serializer):
@@ -65,7 +66,7 @@ class ProjectImageView(viewsets.ModelViewSet):
     A view that enables CRUD function for Project Images
     """
     queryset = ProjectImage.objects.all()
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly]
     serializer_class = serializers.ProjectImageSerializer
 
 class SocialView(viewsets.ModelViewSet):
@@ -73,7 +74,7 @@ class SocialView(viewsets.ModelViewSet):
     A view that enables CRUD function for Socials
     """
     queryset = Social.objects.all()
-    permission_classes = [IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly, IsAuthenticatedOrReadOnly]
     serializer_class = serializers.SocialSerializer
 
     def perform_create(self, serializer):

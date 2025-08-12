@@ -50,3 +50,18 @@ class Social(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='socials')
     link = models.URLField()
     platform = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f'{self.user.username} - {self.platform}'
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='feedbacks')
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    status = models.CharField(max_length=100, choices={
+        'Pending' : 'Pending',
+        'Read' : 'Read',
+        'Invalid' : 'Invalid'
+    })
+
+    def __str__(self):
+        return f'{self.user.username} - {self.title}'
